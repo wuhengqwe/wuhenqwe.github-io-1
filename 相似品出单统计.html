@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拼多多推广数据匹配·出单率版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f5f7fb;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .card {
+            max-width: 960px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,10,30,0.1);
+            padding: 32px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subtitle {
+            color: #475569;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+            border-left: 4px solid #a78bfa;
+            padding-left: 16px;
+            background: #f8fafc;
+            border-radius: 0 12px 12px 0;
+            line-height: 1.5;
+        }
+        .upload-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .upload-area {
+            flex: 1 1 280px;
+            background: #f9f9fc;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+        }
+        .upload-area:hover {
+            border-color: #c7d2fe;
+            background: #fefefe;
+        }
+        .upload-area label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .upload-area small {
+            color: #64748b;
+            font-size: 0.8rem;
+            display: block;
+            margin-top: 6px;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            border: 1px dashed #94a3b8;
+            border-radius: 14px;
+            background: white;
+            text-indent: 10px;
+            cursor: pointer;
+        }
+        input[type="file"]::file-selector-button {
+            background: #eef2ff;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-weight: 500;
+            color: #4f46e5;
+            margin-right: 12px;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid #c7d2fe;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background: #dbeafe;
+        }
+        .sheet-selector {
+            background: #f1f4f9;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin: 20px 0 24px;
+            border: 1px solid #d9e2ef;
+        }
+        .sheet-selector label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-right: 16px;
+        }
+        select {
+            padding: 10px 16px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 0.95rem;
+            min-width: 220px;
+            cursor: pointer;
+            outline: none;
+            transition: 0.15s;
+        }
+        select:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.2);
+        }
+        .status-badge {
+            display: inline-block;
+            background: #e6f7e6;
+            color: #0e6245;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 10px rgba(79,70,229,0.3);
+            border: 1px solid #4f46e5;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -8px #4f46e5;
+        }
+        .btn-primary:disabled {
+            background: #a5b4fc;
+            border-color: #a5b4fc;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+        .download-link {
+            background: #eef2ff;
+            border-radius: 60px;
+            padding: 12px 24px;
+            color: #4f46e5;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c7d2fe;
+        }
+        .footer-note {
+            margin-top: 32px;
+            font-size: 0.85rem;
+            color: #626e7e;
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 12px 20px;
+            border-left: 4px solid #8b5cf6;
+        }
+        .error-message {
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .file-hint {
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 8px;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 30px;
+        }
+    </style>
+    <!-- SheetJS 社区版 (XLSX) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="card">
+        <h1>
+            📊 商品维度匹配器 · 含出单率
+            <span class="status-badge">纯浏览器</span>
+        </h1>
+        <div class="subtitle">
+            · 以“商品名称”为键，从【拼多多推广报表】中统计每个商品：<br>
+            &nbsp;&nbsp;✅ 最大净成交笔数 &nbsp; ✅ 净成交>0的链接数 &nbsp; ✅ 出单率 (成交>0链接数 / 总链接数)<br>
+            · 结果追加到【相似品卡投产表】指定工作表的右侧，保留所有原始列。
+        </div>
+
+        <!-- 两个上传区域 -->
+        <div class="upload-grid">
+            <div class="upload-area">
+                <label>📎 拼多多推广数据报表</label>
+                <input type="file" id="pddFile" accept=".xlsx, .xls, .csv, .xlsm">
+                <div class="file-hint" id="pddHint">未选择文件</div>
+                <small>需要包含「商品名称」和「链接净成交笔数」列</small>
+            </div>
+            <div class="upload-area">
+                <label>📎 相似品卡投产表</label>
+                <input type="file" id="similarFile" accept=".xlsx, .xls, .csv, .xlsm">
+                <div class="file-hint" id="similarHint">未选择文件</div>
+                <small>需包含「商品名称」列 (将在此表指定sheet后追加三列)</small>
+            </div>
+        </div>
+
+        <!-- 工作表选择 (相似品表内可能有多个sheet) -->
+        <div class="sheet-selector" id="sheetSelectorContainer" style="display: none;">
+            <label>📑 选择「原链接分表」工作表 (相似品卡投产表内的目标sheet):</label>
+            <select id="sheetSelect"></select>
+            <div style="margin-top: 8px; color:#4b5563; font-size:0.85rem;">工具将修改此sheet，其他sheet保持不变</div>
+        </div>
+
+        <!-- 处理与下载区域 -->
+        <div class="btn-group">
+            <button class="btn-primary" id="processBtn" disabled>
+                ⚡ 执行匹配 & 生成下载
+            </button>
+            <a id="downloadLink" style="display: none;" class="download-link">⬇️ 下载更新后的文件</a>
+        </div>
+
+        <!-- 提示/错误 -->
+        <div id="messageArea" style="margin-top: 20px;"></div>
+
+        <div class="footer-note">
+            💡 使用说明：<br>
+            1. 上传两个文件（自动解析第一行为列标题）。<br>
+            2. 如果相似品表包含多个sheet，请从下拉列表中选中「原链接分表」。<br>
+            3. 点击执行，浏览器会合并数据并弹出下载。全程文件留在本机。<br>
+            ✅ 出单率 = 同一商品名下“净成交笔数>0的链接数” / “该商品总链接数” (保留两位小数)
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- 全局变量 ----------
+            let pddWorkbook = null;           // 拼多多报表workbook (只取第一个sheet)
+            let pddAggMap = new Map();         // 商品名称 -> { max, count, totalCount }
+            let similarWorkbook = null;         // 相似品卡投产表完整workbook
+            let similarSheetNames = [];          // 所有sheet名
+            let targetSheetName = '';            // 用户选择的目标sheet (原链接分表)
+            
+            // DOM 元素
+            const pddInput = document.getElementById('pddFile');
+            const similarInput = document.getElementById('similarFile');
+            const pddHint = document.getElementById('pddHint');
+            const similarHint = document.getElementById('similarHint');
+            const sheetSelectorContainer = document.getElementById('sheetSelectorContainer');
+            const sheetSelect = document.getElementById('sheetSelect');
+            const processBtn = document.getElementById('processBtn');
+            const downloadLink = document.getElementById('downloadLink');
+            const messageArea = document.getElementById('messageArea');
+
+            // 辅助显示消息
+            function setMessage(text, isError = false) {
+                messageArea.innerHTML = `<div class="${isError ? 'error-message' : ''}" style="padding:8px 0;">${text}</div>`;
+            }
+
+            // 清除下载链接
+            function hideDownload() {
+                downloadLink.style.display = 'none';
+                downloadLink.removeAttribute('download');
+                downloadLink.href = '#';
+            }
+
+            // ---------- 解析拼多多报表并聚合 (第一个sheet) 新增totalCount统计 ----------
+            function processPddFile(workbook) {
+                try {
+                    if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
+                        throw new Error('拼多多报表没有工作表');
+                    }
+                    const firstSheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[firstSheetName];
+                    // 转为二维数组 (包括标题行)
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+                    if (data.length < 2) {
+                        throw new Error('报表内容不足两行 (需要标题行+数据)');
+                    }
+
+                    const headers = data[0].map(h => (h || '').toString().trim());
+                    // 找到商品名称列索引 (包含“商品名称”字段，忽略大小写空格)
+                    let goodsColIdx = -1;
+                    let salesColIdx = -1;
+                    for (let i = 0; i < headers.length; i++) {
+                        const col = headers[i].replace(/\s+/g, '').toLowerCase();
+                        if (col.includes('商品名称') || col.includes('商品名')) {
+                            goodsColIdx = i;
+                        }
+                        if (col.includes('链接净成交笔数') || col.includes('净成交笔数')) {
+                            salesColIdx = i;
+                        }
+                    }
+                    if (goodsColIdx === -1) throw new Error('拼多多报表中未找到“商品名称”列 (尝试包含“商品名称”的标题)');
+                    if (salesColIdx === -1) throw new Error('拼多多报表中未找到“链接净成交笔数”列 (尝试包含“净成交笔数”)');
+
+                    // 聚合map: key商品名, value { max: number, count: number, totalCount: number }
+                    const agg = new Map();
+
+                    for (let r = 1; r < data.length; r++) {
+                        const row = data[r];
+                        if (!row || row.length === 0) continue;
+                        const goodsNameRaw = row[goodsColIdx];
+                        if (goodsNameRaw === undefined || goodsNameRaw === null || goodsNameRaw.toString().trim() === '') continue; // 跳过空商品名
+                        const goodsName = goodsNameRaw.toString().trim();
+
+                        // 净成交笔数
+                        let salesVal = row[salesColIdx];
+                        let salesNum = NaN;
+                        if (salesVal !== undefined && salesVal !== null && salesVal !== '') {
+                            // 尝试转为数字 (兼容数字、字符串数字)
+                            if (typeof salesVal === 'number') salesNum = salesVal;
+                            else {
+                                const str = String(salesVal).trim().replace(/,/g, ''); // 移除千分位逗号
+                                if (str !== '') salesNum = Number(str);
+                            }
+                        }
+
+                        // 初始化或更新
+                        if (!agg.has(goodsName)) {
+                            agg.set(goodsName, { max: -Infinity, count: 0, totalCount: 0 });
+                        }
+                        const record = agg.get(goodsName);
+                        // 总链接数+1
+                        record.totalCount += 1;
+
+                        // 更新最大值 (仅当是有效数字)
+                        if (!isNaN(salesNum)) {
+                            if (salesNum > record.max) record.max = salesNum;
+                            // 计数大于0
+                            if (salesNum > 0) record.count += 1;
+                        }
+                    }
+
+                    // 将max为-Infinity的转成0 (表示没有有效数值)
+                    for (let [key, value] of agg.entries()) {
+                        if (value.max === -Infinity) value.max = 0;
+                    }
+
+                    pddAggMap = agg;
+                    setMessage(`✅ 拼多多报表解析完成，共 ${agg.size} 个不同商品。已统计总链接数及成交>0链接数。`);
+                    return true;
+                } catch (e) {
+                    setMessage(`❌ 处理拼多多报表出错: ${e.message}`, true);
+                    console.error(e);
+                    return false;
+                }
+            }
+
+            // ---------- 解析相似品表，提取sheet名，并重置下拉 ----------
+            function loadSimilarSheets(workbook) {
+                try {
+                    if (!workbook || !workbook.SheetNames || workbook.SheetNames.length === 0) {
+                        throw new Error('相似品表没有工作表');
+                    }
+                    similarSheetNames = workbook.SheetNames;
+                    // 填充下拉
+                    sheetSelect.innerHTML = '';
+                    similarSheetNames.forEach(name => {
+                        const opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        sheetSelect.appendChild(opt);
+                    });
+
+                    // 如果之前有选择记录，尝试选中包含“原链接分表”或第一个
+                    let defaultIndex = 0;
+                    for (let i = 0; i < similarSheetNames.length; i++) {
+                        if (similarSheetNames[i].includes('原链接分表') || similarSheetNames[i].includes('原链接')) {
+                            defaultIndex = i;
+                            break;
+                        }
+                    }
+                    sheetSelect.selectedIndex = defaultIndex;
+                    targetSheetName = similarSheetNames[defaultIndex];
+
+                    sheetSelectorContainer.style.display = 'block';
+                    return true;
+                } catch (e) {
+                    setMessage(`❌ 解析相似品表出错: ${e.message}`, true);
+                    return false;
+                }
+            }
+
+            // 监听sheet选择变化
+            sheetSelect.addEventListener('change', function() {
+                targetSheetName = sheetSelect.value;
+            });
+
+            // ---------- 文件上传监听 ----------
+            pddInput.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                hideDownload();
+                if (!file) {
+                    pddHint.innerText = '未选择文件';
+                    pddAggMap.clear();
+                    checkReady();
+                    return;
+                }
+                pddHint.innerText = `📄 ${file.name} (加载中...)`;
+                try {
+                    const data = await file.arrayBuffer();
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    pddWorkbook = workbook;
+                    const ok = processPddFile(workbook);
+                    if (ok) {
+                        pddHint.innerText = `✅ ${file.name} (已解析)`;
+                    } else {
+                        pddHint.innerText = `⚠️ ${file.name} (解析失败)`;
+                    }
+                } catch (err) {
+                    setMessage(`读取拼多多文件异常: ${err.message}`, true);
+                    pddHint.innerText = `❌ ${file.name} 读取错误`;
+                }
+                checkReady();
+            });
+
+            similarInput.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                hideDownload();
+                if (!file) {
+                    similarHint.innerText = '未选择文件';
+                    similarWorkbook = null;
+                    sheetSelectorContainer.style.display = 'none';
+                    checkReady();
+                    return;
+                }
+                similarHint.innerText = `📄 ${file.name} (加载中...)`;
+                try {
+                    const data = await file.arrayBuffer();
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    similarWorkbook = workbook;
+                    const ok = loadSimilarSheets(workbook);
+                    if (ok) {
+                        similarHint.innerText = `✅ ${file.name} (${similarSheetNames.length} 个sheet)`;
+                    } else {
+                        similarHint.innerText = `⚠️ ${file.name} (解析失败)`;
+                    }
+                } catch (err) {
+                    setMessage(`读取相似品文件异常: ${err.message}`, true);
+                    similarHint.innerText = `❌ ${file.name} 读取错误`;
+                }
+                checkReady();
+            });
+
+            // 检查是否两个文件都已加载且解析成功
+            function checkReady() {
+                if (pddAggMap.size > 0 && similarWorkbook && targetSheetName) {
+                    processBtn.disabled = false;
+                } else {
+                    processBtn.disabled = true;
+                }
+            }
+
+            // ---------- 核心处理：合并数据(含出单率)并生成新文件 ----------
+            function mergeAndDownload() {
+                try {
+                    if (!similarWorkbook || !targetSheetName) {
+                        throw new Error('相似品表或目标sheet未就绪');
+                    }
+
+                    // 获取目标sheet原始数据 (二维数组)
+                    const targetSheet = similarWorkbook.Sheets[targetSheetName];
+                    if (!targetSheet) {
+                        throw new Error(`目标sheet "${targetSheetName}" 不存在`);
+                    }
+                    const rows = XLSX.utils.sheet_to_json(targetSheet, { header: 1, defval: '' });
+                    if (rows.length < 1) {
+                        throw new Error('目标sheet无数据');
+                    }
+
+                    // 找到商品名称列索引 (相似品表)
+                    const headers = rows[0].map(h => (h || '').toString().trim());
+                    let goodsColIdx = -1;
+                    for (let i = 0; i < headers.length; i++) {
+                        const col = headers[i].replace(/\s+/g, '').toLowerCase();
+                        if (col.includes('商品名称') || col.includes('商品名')) {
+                            goodsColIdx = i;
+                            break;
+                        }
+                    }
+                    if (goodsColIdx === -1) throw new Error('相似品表中未找到“商品名称”列 (请检查标题)');
+
+                    // 准备新列名
+                    const newCol1 = '最大净成交笔数';
+                    const newCol2 = '大于0的链接数';
+                    const newCol3 = '出单率';   // 新增
+
+                    // 构建新表头
+                    const newHeaders = [...headers, newCol1, newCol2, newCol3];
+
+                    // 构建新数据行
+                    const newRows = [newHeaders];
+                    for (let r = 1; r < rows.length; r++) {
+                        const row = rows[r];
+                        // 保证row长度与headers一致
+                        const fullRow = new Array(headers.length).fill('');
+                        for (let i = 0; i < headers.length; i++) {
+                            fullRow[i] = (row && row[i] !== undefined && row[i] !== null) ? row[i] : '';
+                        }
+
+                        // 获取商品名称
+                        const goodsNameRaw = fullRow[goodsColIdx];
+                        let goodsName = '';
+                        if (goodsNameRaw !== undefined && goodsNameRaw !== null && goodsNameRaw.toString().trim() !== '') {
+                            goodsName = goodsNameRaw.toString().trim();
+                        }
+
+                        let maxVal = 0;
+                        let countVal = 0;
+                        let rateVal = 0;      // 出单率默认0
+                        if (goodsName && pddAggMap.has(goodsName)) {
+                            const record = pddAggMap.get(goodsName);
+                            maxVal = record.max;
+                            countVal = record.count;
+                            // 计算 出单率 = 成交>0链接数 / 总链接数，保留两位小数
+                            if (record.totalCount > 0) {
+                                rateVal = Math.round((record.count / record.totalCount) * 100) / 100;
+                            }
+                        } else {
+                            // 无数据默认为0
+                            maxVal = 0;
+                            countVal = 0;
+                            rateVal = 0;
+                        }
+
+                        // 追加三列
+                        const newRow = [...fullRow, maxVal, countVal, rateVal];
+                        newRows.push(newRow);
+                    }
+
+                    // 创建新sheet
+                    const newSheet = XLSX.utils.aoa_to_sheet(newRows);
+
+                    // 构建新工作簿：复制原相似品表的所有sheet，仅替换目标sheet
+                    const newWorkbook = XLSX.utils.book_new();
+
+                    // 遍历原所有sheet
+                    similarWorkbook.SheetNames.forEach(sheetName => {
+                        if (sheetName === targetSheetName) {
+                            // 使用更新后的sheet
+                            XLSX.utils.book_append_sheet(newWorkbook, newSheet, sheetName);
+                        } else {
+                            // 直接复制原sheet
+                            const originalSheet = similarWorkbook.Sheets[sheetName];
+                            XLSX.utils.book_append_sheet(newWorkbook, originalSheet, sheetName);
+                        }
+                    });
+
+                    // 生成文件并触发下载
+                    const fileName = '相似品卡投产表_更新_含出单率.xlsx';
+                    XLSX.writeFile(newWorkbook, fileName);
+
+                    // 显示下载链接 (视觉反馈)
+                    downloadLink.style.display = 'inline-flex';
+                    downloadLink.href = '#';
+                    setMessage(`✅ 处理成功！文件 "${fileName}" 已自动下载。新增「出单率」列 (0.00~1.00)`);
+
+                } catch (err) {
+                    setMessage(`❌ 合并处理失败: ${err.message}`, true);
+                    console.error(err);
+                }
+            }
+
+            // 处理按钮点击
+            processBtn.addEventListener('click', function() {
+                mergeAndDownload();
+            });
+
+            // 初始隐藏sheet选择
+        })();
+    </script>
+</body>
+</html>
